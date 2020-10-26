@@ -55,7 +55,7 @@ let read_arc graph line =
 (* Reads a comment or fail. *)
 let read_comment graph line =
   try Scanf.sscanf line " %%" graph
-  with _ ->final_graph
+  with _ ->
     Printf.printf "Unknown line:\n%s\n%!" line ;
     failwith "from_file"
 
@@ -78,7 +78,7 @@ let from_file path =
 
         (* The first character of a line determines its content : n or e. *)
         else match line.[0] with
-          | 'n' -> (n+1, read_node n grafinal_graphph line)
+          | 'n' -> (n+1, read_node n graph line)
           | 'e' -> (n, read_arc graph line)
 
           (* It should be a comment, otherwise we complain. *)
@@ -95,27 +95,86 @@ let from_file path =
   final_graph
 
 (*below for me*)
+let add_teminate_node acu id1 id2 lbl =  
+  if acu.(id1) == 0  
+  then acu.(id1) <- 1
+  else if acu.(id1) == 2
+       then acu.(id1) <- -1;
+  if acu.(id2) == 0  
+  then acu.(id2) <- 2
+  else if acu.(id2) == 1
+      then acu.(id2) <- -1;
+  acu
 
 let export path graph =
 
   (* Open a write-file. *)
-  let ff = open_out (path+".dot") in
+  let ff = open_out (path) in
 
   (* Write in this file. *)
-  fprintf ff "%% digraph finite_state_machine {\n\n" ;
+  fprintf ff "digraph finite_state_machine {\n" ;
   
-  fprintf ff "%% digraph finite_state_machine {\n\n" ;
-  (* Write all nodes (with fake coordinates) *)
-  n_iter_sorted graph (fun id -> fprintf ff "n %.1f 1.0\n" (float_of_int id)) ;
-  fprintf ff "\n" ;
+  fprintf ff "rankdir=LR; {\n" ;
 
+  fprintf ff "size=\"8,5!\" {\n" ;
+
+  fprintf ff "node [shape = doublecircle];" ;
+  (* Write all teminate nodes *)
+  let node_nbr = 0 in 
+
+  n_iter graph (fun id -> node_nbr = node_nbr + 1 ; () );
+
+  let num = Array.make node_nbr 0 in 
+
+  e_fold graph add_teminate_node num;
+
+  Array.iteri (fun index var -> if var != -1 then  fprintf ff "LR_%d" index) num;
+
+  fprintf ff ";\n";
+
+  fprintf ff "node [shape = circle];\n";
   (* Write all arcs *)
-  e_iter graph (fun id1 id2 lbl -> fprintf ff "e %d %d %s\n" id1 id2 lbl) ;
+  e_iter graph (fun id1 id2 lbl -> fprintf ff "LR_%d -> LR_%d [ label = \"%s\" ];\n" id1 id2 lbl) ;
 
-  fprintf ff "\n%% End of graph\n" ;
+  fprintf ff "}\n" ;
 
   close_out ff ;
   ()
 
 (*above for me*)
+(*
+*  digraph finite_state_machine {
+*    rankdir=LR;
+*    size="8,5"
+*    node [shape = doublecircle]; LR_0 LR_3 LR_4 LR_8;
+*    node [shape = circle];
+*    LR_0 -> LR_2 [ label = "SS(B)" ];
+*    LR_0 -> LR_1 [ label = "SS(S)" ];
+*    LR_1 -> LR_3 [ label = "S($end)" ];
+*    LR_2 -> LR_6 [ label = "SS(b)" ];
+*    LR_2 -> LR_5 [ label = "SS(a)" ];
+*    LR_2 -> LR_4 [ label = "S(A)" ];
+*    LR_5 -> LR_7 [ label = "S(b)" ];
+*    LR_5 -> LR_5 [ label = "S(a)" ];
+*    LR_6 -> LR_6 [ label = "S(b)" ];
+*    LR_6 -> LR_5 [ label = "S(a)" ];
+*    LR_7 -> LR_8 [ label = "S(b)" ];
+*    LR_7 -> LR_5 [ label = "S(a)" ];
+    LR_8 -> LR_6 [ label = "S(b)" ];
+    LR_8 -> LR_5 [ label = "S(a)" ];
+  }
+*)
+(*
+size : double|point
+        Maximum width and height of drawing, in inches.
 
+        If only a single number is given, this is used for both the width and the height.
+
+        If defined and the drawing is larger than the given size, the drawing is uniformly scaled down so that it fits within the given size.
+
+        If size ends in an exclamation point "!", then size is taken to be the desired minimum size. In this case, if both dimensions of the drawing are less than size, the drawing is scaled up uniformly until at least one dimension equals its dimension in size.
+
+        There is some interaction between the size and ratio attributes.
+
+        Valid for: Graphs.
+*)
