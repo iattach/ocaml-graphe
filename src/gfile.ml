@@ -95,7 +95,7 @@ let from_file path =
   final_graph
 
 (*below for me*)
-let add_teminate_node acu id1 id2 lbl =  
+(*let add_teminate_node acu id1 id2 lbl =  
   if acu.(id1) == 0  
   then acu.(id1) <- 1
   else if acu.(id1) == 2
@@ -104,7 +104,7 @@ let add_teminate_node acu id1 id2 lbl =
   then acu.(id2) <- 2
   else if acu.(id2) == 1
       then acu.(id2) <- -1;
-  acu
+  acu*)
 
 let export path graph =
 
@@ -116,9 +116,9 @@ let export path graph =
   
   fprintf ff "rankdir=LR; \n" ;
 
-  fprintf ff "size=\"8,5!\" \n" ;
+  fprintf ff "size=\"6,3\" \n" ;
 
-  fprintf ff "node [shape = doublecircle];" ;
+  (*fprintf ff "node [shape = doublecircle];" ;
   (* Write all teminate nodes *)
   let node_nbr = n_fold graph (fun node_nbr id -> node_nbr + 1 ) 0 in 
 
@@ -126,11 +126,11 @@ let export path graph =
 
   Array.iteri (fun index var -> if var != -1 then  fprintf ff "LR_%d " index) num;
 
-  fprintf ff ";\n";
+  fprintf ff ";\n";*)
 
   fprintf ff "node [shape = circle];\n";
   (* Write all arcs *)
-  e_iter graph (fun id1 id2 lbl -> fprintf ff "LR_%d -> LR_%d [ label = \"%s\" ];\n" id1 id2 lbl) ;
+  e_iter graph (fun id1 id2 lbl -> fprintf ff "%d -> %d [ label = \"%s\" ];\n" id1 id2 lbl) ;
 
   fprintf ff "}\n" ;
 
