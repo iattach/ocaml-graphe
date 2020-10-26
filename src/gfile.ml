@@ -94,8 +94,11 @@ let from_file path =
   close_in infile ;
   final_graph
 
-(*below for me*)
-(*let add_teminate_node acu id1 id2 lbl =  
+(*written codes are below *)
+
+(* function verify the begin and end nodes  *)
+(*
+let add_teminate_node acu id1 id2 lbl =  
   if acu.(id1) == 0  
   then acu.(id1) <- 1
   else if acu.(id1) == 2
@@ -104,7 +107,8 @@ let from_file path =
   then acu.(id2) <- 2
   else if acu.(id2) == 1
       then acu.(id2) <- -1;
-  acu*)
+  acu
+*)
 
 let export path graph =
 
@@ -118,6 +122,7 @@ let export path graph =
 
   fprintf ff "size=\"6,3\" \n" ;
 
+  (* shape with doublecircle *)
   (*fprintf ff "node [shape = doublecircle];" ;
   (* Write all teminate nodes *)
   let node_nbr = n_fold graph (fun node_nbr id -> node_nbr + 1 ) 0 in 
@@ -128,6 +133,7 @@ let export path graph =
 
   fprintf ff ";\n";*)
 
+  (* shape with circle *)
   fprintf ff "node [shape = circle];\n";
   (* Write all arcs *)
   e_iter graph (fun id1 id2 lbl -> fprintf ff "%d -> %d [ label = \"%s\" ];\n" id1 id2 lbl) ;
@@ -137,7 +143,6 @@ let export path graph =
   close_out ff ;
   ()
 
-(*above for me*)
 (*
 *  digraph finite_state_machine {
 *    rankdir=LR;
