@@ -114,21 +114,17 @@ let export path graph =
   (* Write in this file. *)
   fprintf ff "digraph finite_state_machine {\n" ;
   
-  fprintf ff "rankdir=LR; {\n" ;
+  fprintf ff "rankdir=LR; \n" ;
 
-  fprintf ff "size=\"8,5!\" {\n" ;
+  fprintf ff "size=\"8,5!\" \n" ;
 
   fprintf ff "node [shape = doublecircle];" ;
   (* Write all teminate nodes *)
-  let node_nbr = 0 in 
+  let node_nbr = n_fold graph (fun node_nbr id -> node_nbr + 1 ) 0 in 
 
-  n_iter graph (fun id -> node_nbr = node_nbr + 1 ; () );
+  let num = e_fold graph add_teminate_node (Array.make node_nbr 0) in 
 
-  let num = Array.make node_nbr 0 in 
-
-  e_fold graph add_teminate_node num;
-
-  Array.iteri (fun index var -> if var != -1 then  fprintf ff "LR_%d" index) num;
+  Array.iteri (fun index var -> if var != -1 then  fprintf ff "LR_%d " index) num;
 
   fprintf ff ";\n";
 

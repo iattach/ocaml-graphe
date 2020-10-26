@@ -14,7 +14,7 @@ let () =
 
   let infile = Sys.argv.(1)
   and outfile = Sys.argv.(4)
-
+  and outfiledot = Sys.argv.(4)^".dot";
   (* These command-line arguments are not used for the moment. *)
   and _source = int_of_string Sys.argv.(2)
   and _sink = int_of_string Sys.argv.(3)
@@ -25,6 +25,6 @@ let () =
 
   (* Rewrite the graph that has been read. *)
   let () = write_file outfile graph in
-
+  let () = export outfiledot graph in
   ()
 
