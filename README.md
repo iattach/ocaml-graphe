@@ -1,3 +1,7 @@
+Project OCaml
+==== 
+Brief introduction
+---
 Base project for Ocaml project on Ford-Fulkerson. This project contains some simple configuration files to facilitate editing Ocaml in VSCode.
 
 To use, you should install the *OCaml* extension in VSCode. Other extensions might work as well but make sure there is only one installed.
@@ -14,3 +18,6 @@ A makefile also provides basic automation :
  - `make` to compile. This creates an ftest.native executable
  - `make format` to indent the entire project
 
+Usage
+---
+ - `./ftest.native infile source:int sink:int outfile`
