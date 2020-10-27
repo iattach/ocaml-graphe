@@ -12,6 +12,30 @@ type path = id list
  *  forbidden is a list of forbidden nodes (they have already been visited)
  *)
 
-let find_path gr forbidden id1 id2 = assert false 
+let find_path gr forbidden id1 id2 = 
+  let rec find_id2 (forbidden,find) = fun src dest-> 
+    match find_arc gr src dest with
+    | Some lbl -> 
+              (src::dest::[], true)
+    | None -> 
+              let out = out_arcs gr src in
+              List.fold_left (
+                fun acu (id,_)-> 
+                  if not (List.mem id forbidden) then 
+                    let (path_find,fin)=find_id2 (src::forbidden,find) id dest in
+                    let (path_now,status)=acu in
+                    if fin && not(status) then 
+                    (src::path_find,fin)
+                    else acu
+                  else acu
+              ) ([],false) out
+  in
+  let (path,find)=find_id2 ([],false) id1 id2 in
+  if find then Some path else None
 
-let show_path path = assert false 
+let show_path path = 
+  match path with
+  | Some path -> List.iter (fun id -> Printf.printf "%d -> " id) path;
+                  Printf.printf " End \n"
+  | None -> Printf.printf "No path found\n"
+  
