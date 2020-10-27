@@ -1,4 +1,6 @@
 open Gfile
+open Gpath
+open Tools
 
 let () =
 
@@ -20,11 +22,18 @@ let () =
   and _sink = int_of_string Sys.argv.(3)
   in
 
+  
   (* Open file *)
   let graph = from_file infile in
 
+  (* Get path *)
+  let graph_int = gmap graph int_of_string in
+  let path=find_path graph_int [] _source _sink in
+  show_path path;
   (* Rewrite the graph that has been read. *)
   let () = write_file outfile graph in
   let () = export outfiledot graph in
+
+  
   ()
 
