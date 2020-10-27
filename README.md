@@ -20,4 +20,8 @@ A makefile also provides basic automation :
 
 Usage
 ---
- - `./ftest.native infile source:int sink:int outfile`
+* Should do `make` firstly, after execute the code below , then if you want to get svg , please do this `dot -Tsvg outfile.dot > outfile.svg` where `outfile` should be the name of the file output and it cand be changed
+    > Direct `./ftest.native infile source:int sink:int outfile`
+
+* Shell code below which is contained in the ./command.sh. Remember to do `chmod +x command.sh` so that the command can be executed 
+    > `./command.sh infile source:int sink:int outfile`
