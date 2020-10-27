@@ -14,3 +14,5 @@ let add_arc (g:int graph) id1 id2 n=
   | Some lbl -> new_arc g id1 id2 (lbl + n) 
   | None -> new_arc g id1 id2 n
   
+
+  

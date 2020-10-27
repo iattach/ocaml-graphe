@@ -1,6 +1,8 @@
 open Gfile
 open Gpath
 open Tools
+open Galgo
+
 
 let () =
 
@@ -24,15 +26,26 @@ let () =
 
   
   (* Open file *)
+  
   let graph = from_file infile in
 
-  (* Get path *)
   let graph_int = gmap graph int_of_string in
-  let path=find_path graph_int [] _source _sink in
-  show_path path;
+
+  (* Get path *)
+  (*let path=find_path graph_int [] _source _sink in
+
+  show_path path;*)
+    
+  (*algo*)
+  let graph_algo=fold_fulkerson graph_int _source _sink in
+  let graph_algo_string = gmap graph_algo string_of_int in
+
   (* Rewrite the graph that has been read. *)
   let () = write_file outfile graph in
-  let () = export outfiledot graph in
+
+  (* export to svg *)
+  let () = export (outfile^"_original.dot") graph in
+  let () = export outfiledot graph_algo_string in
 
   
   ()

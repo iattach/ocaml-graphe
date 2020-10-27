@@ -21,13 +21,17 @@ let find_path gr forbidden id1 id2 =
               let out = out_arcs gr src in
               List.fold_left (
                 fun acu (id,_)-> 
-                  if not (List.mem id forbidden) then 
-                    let (path_find,fin)=find_id2 (src::forbidden,find) id dest in
-                    let (path_now,status)=acu in
-                    if fin && not(status) then 
-                    (src::path_find,fin)
+                  (*Printf.printf "map id %id" id;*)
+                  match find_arc gr src id with
+                  | Some flow -> 
+                    if (flow != 0) &&  not (List.mem id forbidden) then 
+                      let (path_find,fin)=find_id2 (src::forbidden,find) id dest in
+                      let (path_now,status)=acu in
+                      if fin && not(status) then 
+                      (src::path_find,fin) 
+                      else acu
                     else acu
-                  else acu
+                  | None -> raise Not_found
               ) ([],false) out
   in
   let (path,find)=find_id2 ([],false) id1 id2 in
@@ -35,7 +39,7 @@ let find_path gr forbidden id1 id2 =
 
 let show_path path = 
   match path with
-  | Some path -> List.iter (fun id -> Printf.printf "%d -> " id) path;
+  | Some path -> List.iter (fun id -> Printf.printf "%d -> " id) path ; 
                   Printf.printf " End \n"
   | None -> Printf.printf "No path found\n"
   

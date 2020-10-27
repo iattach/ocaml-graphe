@@ -120,7 +120,7 @@ let export path graph =
   
   fprintf ff "rankdir=LR; \n" ;
 
-  fprintf ff "size=\"6,3\" \n" ;
+  (*fprintf ff "size=\"6,3\" \n" ;*)
 
   (* shape with doublecircle *)
   (*fprintf ff "node [shape = doublecircle];" ;
