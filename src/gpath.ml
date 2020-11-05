@@ -16,7 +16,9 @@ let find_path gr forbidden id1 id2 =
   let rec find_id2 (forbidden,find) = fun src dest-> 
     match find_arc gr src dest with
     | Some lbl -> 
+              if (lbl != 0) then
               (src::dest::[], true)
+              else (src::[], false )
     | None -> 
               let out = out_arcs gr src in
               List.fold_left (
@@ -39,7 +41,8 @@ let find_path gr forbidden id1 id2 =
 
 let show_path path = 
   match path with
-  | Some path -> List.iter (fun id -> Printf.printf "%d -> " id) path ; 
-                  Printf.printf " End \n"
+  | Some path -> Printf.printf "path = [";
+            List.iter (fun id -> Printf.printf "%d -> " id) path ; 
+                  Printf.printf "End]\n";
   | None -> Printf.printf "No path found\n"
   
